@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
@@ -35,6 +36,7 @@ class LoginController extends Controller
         }
 
         $token = JWTAuth::fromUser(Auth::user());
+        Cookie::queue('jwt_token', $token, 180);
 
         return response()->json(['token' => $token]);
     }
