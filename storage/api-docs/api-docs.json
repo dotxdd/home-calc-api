@@ -9,26 +9,26 @@
             "post": {
                 "summary": "Authenticate user and generate JWT token",
                 "operationId": "c5e838284c7f343f0e5e5fd589161c96",
-                "parameters": [
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "User's email",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "password",
-                        "in": "query",
-                        "description": "User's password",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "200": {
                         "description": "Login successful"
@@ -37,6 +37,25 @@
                         "description": "Invalid credentials"
                     }
                 }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "summary": "Invalidate JWT token to logout user",
+                "operationId": "399284ae5e84627c95a691127018a412",
+                "responses": {
+                    "200": {
+                        "description": "Logout successful"
+                    },
+                    "500": {
+                        "description": "Failed to logout"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/register": {

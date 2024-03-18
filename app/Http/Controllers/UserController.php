@@ -46,7 +46,6 @@ class UserController extends Controller
             'name' => 'required|min:2',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
-            'password-confirmation' => 'required|same:password'
         ]);
         $user = User::create([
             'name' => $validatedData['name'],
