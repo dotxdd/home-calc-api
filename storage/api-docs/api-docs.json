@@ -7,20 +7,29 @@
     "paths": {
         "/api/login": {
             "post": {
-                "summary": "Authenticate user and generate JWT token",
-                "operationId": "c5e838284c7f343f0e5e5fd589161c96",
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login",
+                "operationId": "5928fb15397c44cb50576a2dcd29cf7b",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
                                 "properties": {
                                     "email": {
                                         "type": "string",
+                                        "format": "email",
                                         "example": "user@example.com"
                                     },
                                     "password": {
                                         "type": "string",
+                                        "format": "password",
                                         "example": "password123"
                                     }
                                 },
@@ -30,25 +39,51 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "Login successful"
-                    },
                     "401": {
-                        "description": "Invalid credentials"
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "failed logging in"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
-        "/api/logout": {
-            "post": {
-                "summary": "Invalidate JWT token to logout user",
-                "operationId": "399284ae5e84627c95a691127018a412",
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get authenticated user",
+                "operationId": "158ae39cce92d2935a8102aef6920748",
                 "responses": {
                     "200": {
-                        "description": "Logout successful"
+                        "description": "Successful operation"
                     },
-                    "500": {
-                        "description": "Failed to logout"
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -60,82 +95,71 @@
         },
         "/api/register": {
             "post": {
+                "tags": [
+                    "Authentication"
+                ],
                 "summary": "Register a new user",
-                "operationId": "2f25885f3b6f61ca11724ec302d2e439",
-                "parameters": [
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "User's name",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "email",
-                        "in": "query",
-                        "description": "User's email",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "password",
-                        "in": "query",
-                        "description": "User's password",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "operationId": "a39949df013c1eb78ff8bd8f481d408a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
-                ],
+                },
                 "responses": {
                     "201": {
                         "description": "User registered successfully"
                     },
                     "422": {
-                        "description": "Validation error"
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "name": [
+                                                    "The name field is required."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/user": {
-            "get": {
-                "summary": "Get logged-in user details",
-                "operationId": "68f71ba285837ee66901e2681a219252",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/test": {
-            "get": {
-                "summary": "Get logged-in user details",
-                "operationId": "e80552706d8ba1a69d237c00d1072413",
-                "responses": {
-                    "200": {
-                        "description": "Success"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         }
     },

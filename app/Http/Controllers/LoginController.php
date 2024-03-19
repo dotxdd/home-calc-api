@@ -2,71 +2,113 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
     /**
      * @OA\Post(
      *     path="/api/login",
-     *     summary="Authenticate user and generate JWT token",
+     *     summary="Login",
+     *     tags={"Authentication"},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(
-     *                 @OA\Property(property="email", type="string", example="user@example.com"),
-     *                 @OA\Property(property="password", type="string", example="password123")
-     *             )
-     *         )
+     *         @OA\JsonContent(
+     *             required={"email","password"},
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="password123")
+     *         ),
      *     ),
-     *     @OA\Response(response="200", description="Login successful"),
-     *     @OA\Response(response="401", description="Invalid credentials")
+     *     @OA\Response(
+     *         response="401",
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="failed logging in")
+     *         )
+     *     )
      * )
      */
-    public function login(Request $request)
+    public function __invoke(Request $request){
+    if (!auth()->attempt(['email' => $request->email, 'password'=> $request->password])){
+
+        return response()->json(['error' => 'failed logging in'], 401);
+    }
+
+    $token = auth()->user()->createToken('personal_token')->plainTextToken;
+
+        $cookie = cookie('auth_token', $token, 60 * 24 * 7); // Cookie będzie ważne przez 7 dni
+
+        return response()->json(['token' => $token])->withCookie($cookie);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/user",
+     *     summary="Get authenticated user",
+     *     tags={"User"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response="200",
+     *         description="Successful operation",
+     *     ),
+     *     @OA\Response(
+     *         response="401",
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", example="Unauthenticated"),
+     *         ),
+     *     ),
+     * )
+     */
+    public function getUser(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $token = JWTAuth::fromUser(Auth::user());
-        Cookie::queue('jwt_token', $token, 180);
-
-        return response()->json(['token' => $token]);
+        return response()->json(['user' => $request->user()]);
     }
     /**
      * @OA\Post(
-     *     path="/api/logout",
-     *     summary="Invalidate JWT token to logout user",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response="200", description="Logout successful"),
-     *     @OA\Response(response="500", description="Failed to logout")
-     * )
-     *
-     * Logout user by invalidating JWT token
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout(Request $request)
-    {
-        // Attempt to invalidate the JWT token
-        try {
-            JWTAuth::parseToken()->invalidate();
-            return response()->json(['message' => 'Logout successful']);
-        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            return response()->json(['error' => 'Token expired'], 401);
-        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            return response()->json(['error' => 'Token invalid'], 401);
-        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            return response()->json(['error' => 'Failed to logout'], 500);
-        }
-    }
+     *     path="/api/register",
+     *     summary="Register a new user",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","email","password"},
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="password123")
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="User registered successfully",
 
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *             @OA\Property(property="errors", type="object", example={"name": {"The name field is required."}})
+     *         )
+     *     )
+     * )
+     */
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+    }
 }
