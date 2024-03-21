@@ -58,14 +58,29 @@ class LoginController extends Controller
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Response(
-     *         response="200",
+     *         response=200,
      *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="message", type="string", example="success"),
+     *                 @OA\Property(property="user", type="object",
+     *                     description="User object",
+     *                 ),
+     *             ),
+     *             @OA\Property(property="status_page", type="integer", example=200),
+     *         ),
      *     ),
      *     @OA\Response(
-     *         response="401",
+     *         response=401,
      *         description="Unauthenticated",
      *         @OA\JsonContent(
-     *             @OA\Property(property="error", type="string", example="Unauthenticated"),
+     *             type="object",
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="message", type="string", example="fail"),
+     *                 @OA\Property(property="errors", type="string", example="fail"),
+     *             ),
+     *             @OA\Property(property="status_page", type="integer", example=500),
      *         ),
      *     ),
      * )
@@ -77,10 +92,10 @@ class LoginController extends Controller
             $user = $request->user();
 
             // Return a success response with the user data wrapped inside the "data" field
-            return response()->json(['data' => ['status' => 'success', 'user' => $user]]);
+            return response()->json(['data' => ['message' => 'success', 'user' => $user], 'status_page' => 200]);
         } catch (\Exception $e) {
             // Return an error response if something goes wrong
-            return response()->json(['data' => ['status' => 'error', 'message' => 'Failed to retrieve user', 'error' => $e->getMessage()]], 500);
+            return response()->json(['data' => ['message' => 'Failed to retrieve user', 'errors' => $e->getMessage()], 'status_page' => 500] );
         }
     }
     /**
