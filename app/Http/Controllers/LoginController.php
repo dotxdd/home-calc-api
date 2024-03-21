@@ -35,7 +35,7 @@ class LoginController extends Controller
         try {
             if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
 
-                return response()->json(['data' => ['error' => 'failed logging in'],'status_page' => 401], 401);
+                return response()->json(['message' => 'Failed to login user','errors' => 'failed logging in']);
             }
 
             $token = auth()->user()->createToken('personal_token')->plainTextToken;
@@ -46,7 +46,7 @@ class LoginController extends Controller
         }
         catch (\Exception $e) {
             // Return an error response if something goes wrong
-            return response()->json(['data' => ['message' => 'Failed to login user', 'error' => $e->getMessage()], 'status_page' => 500], 500);
+            return response()->json(['message' => 'Failed to login user', 'error' => $e->getMessage()]);
         }
 
     }
@@ -80,7 +80,7 @@ class LoginController extends Controller
             return response()->json(['data' => ['status' => 'success', 'user' => $user]]);
         } catch (\Exception $e) {
             // Return an error response if something goes wrong
-            return response()->json(['data' => ['status' => 'error', 'message' => 'Failed to retrieve user', 'error' => $e->getMessage()]], 500);
+            return response()->json(['status' => 'errors', 'message' => 'Failed to retrieve user', 'error' => $e->getMessage()]);
         }
     }
     /**
@@ -133,12 +133,13 @@ class LoginController extends Controller
             return response()->json(['data' => ['message' => 'User registered successfully', 'user' => $user], 'status_page' => 201], 201);
         } catch (ValidationException $e) {
             // Return a JSON response with validation errors
-            return response()->json(['data' => ['message' => 'User registration failed', 'errors' => $e->errors()], 'status_page' => 422], 422);
+            return response()->json( ['message' => 'User registration failed', 'errors' => $e->validator->errors()->messages()]);
         } catch (\Exception $e) {
             // Return an error response if something else goes wrong
-            return response()->json(['data' => ['message' => 'User registration failed', 'error' => $e->getMessage()], 'status_page' => 500], 500);
+            return response()->json(['data' => ['message' => 'User registration failed', 'errors' => $e->getMessage()], 'status_page' => 500], 500);
         }
     }
+
     /**
      * @OA\Post(
      *     path="/api/logout",
@@ -175,7 +176,7 @@ class LoginController extends Controller
             return response()->json(['data' => ['message' => 'User logged out successfully'], 'status_page' => 200])->withCookie($cookie);
         } catch (\Exception $e) {
             // Return an error response if something goes wrong
-            return response()->json(['data' =>['message' => 'Logout failed', 'error' => $e->getMessage()], 'status_page' => 500], 500);
+            return response()->json(['message' => 'Logout failed', 'errors' => $e->getMessage()]);
         }
     }
 
