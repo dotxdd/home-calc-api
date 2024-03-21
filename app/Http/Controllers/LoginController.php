@@ -35,7 +35,7 @@ class LoginController extends Controller
         try {
             if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
 
-                return response()->json(['data' => ['error' => 'failed logging in'],'status_page' => 401], 401);
+                return response()->json(['data' => ['message' => 'Failed to login user','error' => 'failed logging in'],'status_page' => 401]);
             }
 
             $token = auth()->user()->createToken('personal_token')->plainTextToken;
@@ -46,7 +46,7 @@ class LoginController extends Controller
         }
         catch (\Exception $e) {
             // Return an error response if something goes wrong
-            return response()->json(['data' => ['message' => 'Failed to login user', 'error' => $e->getMessage()], 'status_page' => 500], 500);
+            return response()->json(['data' => ['message' => 'Failed to login user', 'error' => $e->getMessage()], 'status_page' => 500]);
         }
 
     }
@@ -176,7 +176,7 @@ class LoginController extends Controller
             return response()->json(['data' => ['message' => 'User logged out successfully'], 'status_page' => 200])->withCookie($cookie);
         } catch (\Exception $e) {
             // Return an error response if something goes wrong
-            return response()->json(['data' =>['message' => 'Logout failed', 'error' => $e->getMessage()], 'status_page' => 500], 500);
+            return response()->json(['data' =>['message' => 'Logout failed', 'error' => $e->getMessage()], 'status_page' => 500]);
         }
     }
 
