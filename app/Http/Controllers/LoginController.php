@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CostType;
 use App\Models\User;
+use App\Services\CostTypesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -80,7 +82,7 @@ class LoginController extends Controller
      *                 @OA\Property(property="message", type="string", example="fail"),
      *                 @OA\Property(property="errors", type="string", example="fail"),
      *             ),
-     *             @OA\Property(property="status_page", type="integer", example=500),
+     *             @OA\Property(property="status_page", type="integer", example=401),
      *         ),
      *     ),
      * )
@@ -95,7 +97,7 @@ class LoginController extends Controller
             return response()->json(['data' => ['message' => 'success', 'user' => $user], 'status_page' => 200]);
         } catch (\Exception $e) {
             // Return an error response if something goes wrong
-            return response()->json(['data' => ['message' => 'Failed to retrieve user', 'errors' => $e->getMessage()], 'status_page' => 500] );
+            return response()->json(['data' => ['message' => 'Failed to retrieve user', 'errors' => $e->getMessage()], 'status_page' => 401] );
         }
     }
     /**
@@ -143,6 +145,8 @@ class LoginController extends Controller
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),
             ]);
+
+            CostType::addDefaultCostTypes($user);
 
             // Return a success response with the user data wrapped inside the "data" field
             return response()->json(['data' => ['message' => 'User registered successfully', 'user' => $user], 'status_page' => 201], 201);

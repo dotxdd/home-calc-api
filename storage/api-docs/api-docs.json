@@ -5,6 +5,975 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/costs": {
+            "get": {
+                "tags": [
+                    "Costs"
+                ],
+                "summary": "Get all costs",
+                "description": "Retrieve a list of all costs.",
+                "operationId": "67efd02dfb69cd07e1a1313709376de2",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "costs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Costs retrieved successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while retrieving costs."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Costs"
+                ],
+                "summary": "Create a new cost",
+                "description": "Create a new cost record.",
+                "operationId": "261237e5f0a5fa11c823ab65f74d6741",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "date",
+                                    "cost_type_id",
+                                    "desc"
+                                ],
+                                "properties": {
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-03-23"
+                                    },
+                                    "cost_type_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Description of the cost"
+                                    },
+                                    "price": {
+                                        "type": "integer",
+                                        "example": "Price of the cost"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cost created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost created successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while storing cost."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/costs/{id}": {
+            "get": {
+                "tags": [
+                    "Costs"
+                ],
+                "summary": "Get a specific cost",
+                "description": "Retrieve a specific cost by its ID.",
+                "operationId": "3e70d90bddb4c9279190ebbf3b5ce775",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the cost to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cost retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost retrieved successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while retrieving cost."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Costs"
+                ],
+                "summary": "Update an existing cost",
+                "description": "Update an existing cost record.",
+                "operationId": "48f063081604981bc069d0285f7821fe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the cost to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "date",
+                                    "cost_type_id",
+                                    "desc"
+                                ],
+                                "properties": {
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-03-23"
+                                    },
+                                    "cost_type_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Updated description of the cost"
+                                    },
+                                    "price": {
+                                        "type": "integer",
+                                        "example": "Updated price of the cost"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cost updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost updated successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while updating cost."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Costs"
+                ],
+                "summary": "Delete a specific cost",
+                "description": "Delete a specific cost by its ID.",
+                "operationId": "0003b2ebbb629dc423d7e97b9146dfe5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the cost to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cost deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost deleted successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while deleting cost."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cost-types": {
+            "get": {
+                "tags": [
+                    "Cost Types"
+                ],
+                "summary": "Get all cost types",
+                "description": "Retrieve a list of all cost types.",
+                "operationId": "9e86563bdbcb4676328f7ae6c34cd176",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_type": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost types retrieved successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while retrieving cost types."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Cost Types"
+                ],
+                "summary": "Create a new cost type",
+                "description": "Create a new cost type.",
+                "operationId": "3e6777e10182458537e94f304e8e68f3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "desc"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Cost Type Name"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Description of cost type"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cost type created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_type": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type created successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error occurred",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Validation error occurred."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while creating cost type."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cost-types/{costType}": {
+            "get": {
+                "tags": [
+                    "Cost Types"
+                ],
+                "summary": "Get a specific cost type",
+                "description": "Retrieve a specific cost type by ID.",
+                "operationId": "7e066aedfb88642e9c4ad7aef19dc70f",
+                "parameters": [
+                    {
+                        "name": "costType",
+                        "in": "path",
+                        "description": "ID of the cost type to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cost type retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_type": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type retrieved successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cost type not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cost type not found."
+                                        },
+                                        "errors": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while retrieving cost type."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Cost Types"
+                ],
+                "summary": "Update an existing cost type",
+                "description": "Update an existing cost type by ID.",
+                "operationId": "a48136035def74f38847f7b4c1979677",
+                "parameters": [
+                    {
+                        "name": "costType",
+                        "in": "path",
+                        "description": "ID of the cost type to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "desc"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated Cost Type Name"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Updated description of cost type"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cost type updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_type": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type updated successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error occurred",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Validation error occurred."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while updating cost type."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Cost Types"
+                ],
+                "summary": "Delete an existing cost type",
+                "description": "Delete an existing cost type by ID.",
+                "operationId": "281fd3e396ee218559e63ba36a0f173c",
+                "parameters": [
+                    {
+                        "name": "costType",
+                        "in": "path",
+                        "description": "ID of the cost type to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Cost type deleted successfully"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while deleting cost type."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/login": {
             "post": {
                 "tags": [
@@ -116,7 +1085,7 @@
                                         },
                                         "status_page": {
                                             "type": "integer",
-                                            "example": 500
+                                            "example": 401
                                         }
                                     },
                                     "type": "object"
