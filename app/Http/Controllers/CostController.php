@@ -75,7 +75,7 @@ class CostController extends Controller
     public function index()
     {
         try {
-            $costs = Cost::all();
+            $costs = Cost::with('costType')->get();
             return response()->json([
                 'data' => ['costs' => $costs, 'message' => 'Costs retrieved successfully.'],
                 'status_page' => Response::HTTP_OK
@@ -255,7 +255,7 @@ class CostController extends Controller
     public function show($id)
     {
         try {
-            $cost = Cost::findOrFail($id);
+            $cost = Cost::findOrFail($id)->with('costType')->get();
             return response()->json([
                 'data' => ['cost' => $cost, 'message' => 'Cost retrieved successfully.'],
                 'status_page' => Response::HTTP_OK

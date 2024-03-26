@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CostController;
 use App\Http\Controllers\CostTypeController;
+use App\Http\Controllers\CostTypeLimitController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/costs/{id}', [CostController::class, 'show']);
     Route::put('/costs/{id}', [CostController::class, 'update']);
     Route::delete('/costs/{id}', [CostController::class, 'destroy']);
+
+    Route::get('/cost-types-limits', [CostTypeLimitController::class, 'index']);
+    Route::get('/cost-types-limits/{id}', [CostTypeLimitController::class, 'show']);
+    Route::post('/cost-types-limits', [CostTypeLimitController::class, 'store']);
+    Route::put('/cost-types-limits/{id}', [CostTypeLimitController::class, 'update']);
+    Route::delete('/cost-types-limits/{id}', [CostTypeLimitController::class, 'destroy']);
 });
 Route::post('register', [LoginController::class, 'register'])->middleware('guest:sanctum');
 

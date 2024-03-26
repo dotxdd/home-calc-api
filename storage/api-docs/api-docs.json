@@ -114,7 +114,7 @@
                                     },
                                     "price": {
                                         "type": "integer",
-                                        "example": "Price of the cost"
+                                        "example": 322
                                     }
                                 },
                                 "type": "object"
@@ -318,7 +318,7 @@
                                     },
                                     "price": {
                                         "type": "integer",
-                                        "example": "Updated price of the cost"
+                                        "example": 190
                                     }
                                 },
                                 "type": "object"
@@ -957,6 +957,555 @@
                                             "type": "object"
                                         },
                                         "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cost-types-limits": {
+            "get": {
+                "tags": [
+                    "Cost Type Limits"
+                ],
+                "summary": "Get all cost type limits",
+                "description": "Retrieve a list of all cost type limits.",
+                "operationId": "c2eddaa5da78888a6e84a6a68b34d956",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_type_limits": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type limits retrieved successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while retrieving cost type limits."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Cost Type Limits"
+                ],
+                "summary": "Create a new cost type limit",
+                "description": "Create a new cost type limit.",
+                "operationId": "242e71fc79c6ae5107f22a4bac838155",
+                "requestBody": {
+                    "description": "Cost type limit data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cost_type_id",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "cost_type_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "weekly_limit": {
+                                        "type": "number",
+                                        "example": "100.50"
+                                    },
+                                    "monthly_limit": {
+                                        "type": "number",
+                                        "example": "500.00"
+                                    },
+                                    "quarter_limit": {
+                                        "type": "number",
+                                        "example": "1500.00"
+                                    },
+                                    "yearly_limit": {
+                                        "type": "number",
+                                        "example": "6000.00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cost type limit created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_type_limit": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type limit created successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 201
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while creating cost type limit."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/cost-types-limits/{id}": {
+            "get": {
+                "tags": [
+                    "Cost Type Limits"
+                ],
+                "summary": "Get a specific cost type limit",
+                "description": "Retrieve a specific cost type limit by its ID.",
+                "operationId": "c0300c3953d8c86639ea49cb15bfed7b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the cost type limit to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_type_limit": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type limit retrieved successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cost type limit not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type limit not found."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Cost Type Limits"
+                ],
+                "summary": "Update a specific cost type limit",
+                "description": "Update a specific cost type limit by its ID.",
+                "operationId": "16307ff2e331fe1e803726361f5c2cf3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the cost type limit to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Cost type limit data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "cost_type_id",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "cost_type_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "weekly_limit": {
+                                        "type": "number",
+                                        "example": "100.50"
+                                    },
+                                    "monthly_limit": {
+                                        "type": "number",
+                                        "example": "500.00"
+                                    },
+                                    "quarter_limit": {
+                                        "type": "number",
+                                        "example": "1500.00"
+                                    },
+                                    "yearly_limit": {
+                                        "type": "number",
+                                        "example": "6000.00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cost type limit updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_type_limit": {
+                                                    "type": "object"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type limit updated successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 422
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while updating cost type limit."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Cost Type Limits"
+                ],
+                "summary": "Delete a specific cost type limit",
+                "description": "Delete a specific cost type limit by its ID.",
+                "operationId": "02aa46eeda57728b900864b81ccf4940",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the cost type limit to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cost type limit deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type limit deleted successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cost type limit not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost type limit not found."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while deleting cost type limit."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_code": {
                                             "type": "integer",
                                             "example": 500
                                         }
