@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_first_config'
     ];
 
     /**
@@ -33,7 +34,11 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    public function isFirstConfig()
+    {
+        $this->is_first_config = 0;
+        $this->save(); // Optionally save the updated value to the database
+    }
     /**
      * Get the attributes that should be cast.
      *

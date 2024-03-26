@@ -101,6 +101,61 @@ class LoginController extends Controller
         }
     }
     /**
+     * @OA\Patch(
+     *     path="/api/user/config",
+     *     summary="Update is_first_config status of authenticated user",
+     *     tags={"User"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="is_first_config status updated successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="message", type="string", example="success"),
+     *                 @OA\Property(property="user", type="object",
+     *                     description="Updated User object",
+     *                 ),
+     *             ),
+     *             @OA\Property(property="status_page", type="integer", example=200),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="message", type="string", example="fail"),
+     *                 @OA\Property(property="errors", type="string", example="fail"),
+     *             ),
+     *             @OA\Property(property="status_page", type="integer", example=401),
+     *         ),
+     *     ),
+     * )
+     */
+    public function updateFirstConfig(Request $request)
+    {
+        try {
+            // Get the authenticated user
+            $user = $request->user();
+
+            // Validate the incoming data
+            $request->validate([
+                'is_first_config' => 'boolean',
+            ]);
+
+            // Update user's is_first_config status
+            $user->isFirstConfig();
+
+            // Return a success response with the updated user data
+            return response()->json(['data' => ['message' => 'success', 'user' => $user], 'status_page' => 200]);
+        } catch (\Exception $e) {
+            // Return an error response if something goes wrong
+            return response()->json(['data' => ['message' => 'Failed to update is_first_config status', 'errors' => $e->getMessage()], 'status_page' => 401]);
+        }
+    }
+    /**
      * @OA\Post(
      *     path="/api/register",
      *     summary="Register a new user",

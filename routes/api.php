@@ -14,6 +14,7 @@ Route::post('login', LoginController::class)->middleware('guest:sanctum');
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/user', [LoginController::class, 'getUser']);
+    Route::patch('/user/config', [LoginController::class, 'updateFirstConfig']);
     Route::get('/cost-types', [CostTypeController::class, 'index']);
     Route::get('/cost-types/{costType}', [CostTypeController::class, 'show']);
     Route::post('/cost-types', [CostTypeController::class, 'store']);
