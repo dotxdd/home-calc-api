@@ -10,79 +10,147 @@ use Exception;
 
 class CostTypeController extends Controller
 {
-/**
- * @OA\Get(
- *     path="/api/cost-types",
- *     summary="Get all cost types",
- *     tags={"Cost Types"},
- *     security={{"bearerAuth":{}}},
- *     description="Retrieve a list of all cost types.",
- *     @OA\Response(
- *         response=200,
- *         description="Successful operation",
- *         @OA\JsonContent(
- *             type="object",
- *             @OA\Property(
- *                 property="data",
- *                 type="object",
- *                 @OA\Property(
- *                     property="cost_type",
- *                     type="array",
- *                     @OA\Items(type="object")
- *                 ),
- *                 @OA\Property(
- *                     property="message",
- *                     type="string",
- *                     example="Cost types retrieved successfully."
- *                 )
- *             ),
- *             @OA\Property(
- *                 property="status_page",
- *                 type="integer",
- *                 example=200
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=500,
- *         description="Internal server error",
- *         @OA\JsonContent(
- *             type="object",
- *             @OA\Property(
- *                 property="data",
- *                 type="object",
- *                 @OA\Property(
- *                     property="errors",
- *                     type="string",
- *                     example="Error message"
- *                 ),
- *                 @OA\Property(
- *                     property="message",
- *                     type="string",
- *                     example="Error occurred while retrieving cost types."
- *                 )
- *             ),
- *             @OA\Property(
- *                 property="status_page",
- *                 type="integer",
- *                 example=500
- *             )
- *         )
- *     )
- * )
- */
+    /**
+     * @OA\Get(
+     *     path="/api/cost-types",
+     *     summary="Get all cost types",
+     *     tags={"Cost Types"},
+     *     security={{"bearerAuth":{}}},
+     *     description="Retrieve a list of all cost types. You can optionally filter by name.",
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number for pagination (default: 1)",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=1
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="Filter cost types by name",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="cost_types",
+     *                     type="array",
+     *                     @OA\Items(type="object")
+     *                 ),
+     *                 @OA\Property(
+     *                     property="message",
+     *                     type="string",
+     *                     example="Cost types retrieved successfully."
+     *                 ),
+     *                 @OA\Property(
+     *                     property="pagination",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="total",
+     *                         type="integer",
+     *                         example=10
+     *                     ),
+     *                     @OA\Property(
+     *                         property="per_page",
+     *                         type="integer",
+     *                         example=10
+     *                     ),
+     *                     @OA\Property(
+     *                         property="current_page",
+     *                         type="integer",
+     *                         example=1
+     *                     ),
+     *                     @OA\Property(
+     *                         property="last_page",
+     *                         type="integer",
+     *                         example=1
+     *                     ),
+     *                     @OA\Property(
+     *                         property="from",
+     *                         type="integer",
+     *                         example=1
+     *                     ),
+     *                     @OA\Property(
+     *                         property="to",
+     *                         type="integer",
+     *                         example=10
+     *                     )
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="status_page",
+     *                 type="integer",
+     *                 example=200
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="errors",
+     *                     type="string",
+     *                     example="Error message"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="message",
+     *                     type="string",
+     *                     example="Error occurred while retrieving cost types."
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="status_page",
+     *                 type="integer",
+     *                 example=500
+     *             )
+     *         )
+     *     )
+     * )
+     */
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $costTypes = CostType::all();
+            // Get the current page from the request, default to 1 if not provided
+            $currentPage = $request->query('page', 1);
+
+            // Define the number of items per page
+            $perPage = 10; // You can adjust this number according to your needs
+
+            // Retrieve cost types with pagination
+            $query = CostType::query();
+
+            // Filter by name if provided in the query
+            if ($request->has('name')) {
+                $query->where('name', 'like', '%' . $request->input('name') . '%');
+            }
+
+            $costTypes = $query->paginate($perPage, ['*'], 'page', $currentPage);
+
             return response()->json([
-                'data' => ['cost_type' => $costTypes, 'message' => 'Cost types retrieved successfully.'],
+                'data' => ['cost_types' => $costTypes, 'message' => 'Cost types retrieved successfully.'],
                 'status_page' => Response::HTTP_OK
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'data' => [ 'errors' => $e->getMessage(), 'message' => 'Error occurred while retrieving cost types.'],
+                'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while retrieving cost types.'],
                 'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }

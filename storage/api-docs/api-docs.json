@@ -13,6 +13,49 @@
                 "summary": "Get all costs",
                 "description": "Retrieve a list of all costs.",
                 "operationId": "67efd02dfb69cd07e1a1313709376de2",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number for pagination (default: 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "Filter costs by start date (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-01-01"
+                        }
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "Filter costs by end date (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-12-31"
+                        }
+                    },
+                    {
+                        "name": "cost_type_name",
+                        "in": "query",
+                        "description": "Filter costs by related cost type name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -479,8 +522,29 @@
                     "Cost Types"
                 ],
                 "summary": "Get all cost types",
-                "description": "Retrieve a list of all cost types.",
+                "description": "Retrieve a list of all cost types. You can optionally filter by name.",
                 "operationId": "9e86563bdbcb4676328f7ae6c34cd176",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number for pagination (default: 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filter cost types by name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -490,7 +554,7 @@
                                     "properties": {
                                         "data": {
                                             "properties": {
-                                                "cost_type": {
+                                                "cost_types": {
                                                     "type": "array",
                                                     "items": {
                                                         "type": "object"
@@ -499,6 +563,35 @@
                                                 "message": {
                                                     "type": "string",
                                                     "example": "Cost types retrieved successfully."
+                                                },
+                                                "pagination": {
+                                                    "properties": {
+                                                        "total": {
+                                                            "type": "integer",
+                                                            "example": 10
+                                                        },
+                                                        "per_page": {
+                                                            "type": "integer",
+                                                            "example": 10
+                                                        },
+                                                        "current_page": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "last_page": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "from": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "to": {
+                                                            "type": "integer",
+                                                            "example": 10
+                                                        }
+                                                    },
+                                                    "type": "object"
                                                 }
                                             },
                                             "type": "object"
@@ -982,6 +1075,27 @@
                 "summary": "Get all cost type limits",
                 "description": "Retrieve a list of all cost type limits.",
                 "operationId": "c2eddaa5da78888a6e84a6a68b34d956",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number for pagination (default: 1)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    {
+                        "name": "cost_type_name",
+                        "in": "query",
+                        "description": "Filter cost type limits by related cost type name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation",

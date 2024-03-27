@@ -17,6 +17,47 @@ class CostController extends Controller
      *     tags={"Costs"},
      *     security={{"bearerAuth":{}}},
      *     description="Retrieve a list of all costs.",
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number for pagination (default: 1)",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=1
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="start_date",
+     *         in="query",
+     *         description="Filter costs by start date (YYYY-MM-DD)",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             format="date",
+     *             example="2024-01-01"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="end_date",
+     *         in="query",
+     *         description="Filter costs by end date (YYYY-MM-DD)",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             format="date",
+     *             example="2024-12-31"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="cost_type_name",
+     *         in="query",
+     *         description="Filter costs by related cost type name",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
@@ -72,10 +113,37 @@ class CostController extends Controller
      * )
      */
 
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $costs = Cost::with('costType')->get();
+            // Get the current page from the request, default to 1 if not provided
+            $currentPage = $request->query('page', 1);
+
+            // Define the number of items per page
+            $perPage = 10; // You can adjust this number according to your needs
+
+            // Retrieve costs with pagination
+            $query = Cost::query()->with('costType');
+
+            // Filter by start date if provided in the query
+            if ($request->has('start_date')) {
+                $query->whereDate('date', '>=', $request->input('start_date'));
+            }
+
+            // Filter by end date if provided in the query
+            if ($request->has('end_date')) {
+                $query->whereDate('date', '<=', $request->input('end_date'));
+            }
+
+            // Filter by related cost type name if provided in the query
+            if ($request->has('cost_type_name')) {
+                $query->whereHas('costType', function ($query) use ($request) {
+                    $query->where('name', 'like', '%' . $request->input('cost_type_name') . '%');
+                });
+            }
+
+            $costs = $query->paginate($perPage, ['*'], 'page', $currentPage);
+
             return response()->json([
                 'data' => ['costs' => $costs, 'message' => 'Costs retrieved successfully.'],
                 'status_page' => Response::HTTP_OK
