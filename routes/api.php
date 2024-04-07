@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CostController;
+use App\Http\Controllers\CostStatsController;
 use App\Http\Controllers\CostTypeController;
 use App\Http\Controllers\CostTypeLimitController;
 use App\Http\Controllers\LoginController;
@@ -32,6 +33,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cost-types-limits', [CostTypeLimitController::class, 'store']);
     Route::put('/cost-types-limits/{id}', [CostTypeLimitController::class, 'update']);
     Route::delete('/cost-types-limits/{id}', [CostTypeLimitController::class, 'destroy']);
+
+    //stats
+    Route::get('/daily/costs/stats', [CostStatsController::class, 'getDailyCosts']);
+    Route::get('/monthly/costs/stats', [CostStatsController::class, 'getMonthlyCosts']);
+    Route::get('/quarterly/costs/stats', [CostStatsController::class, 'getQuarterlyCosts']);
+    Route::get('/yearly/costs/stats', [CostStatsController::class, 'getYearlyCosts']);
+
+
+
 });
 Route::post('register', [LoginController::class, 'register'])->middleware('guest:sanctum');
 

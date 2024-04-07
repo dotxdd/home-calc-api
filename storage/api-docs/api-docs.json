@@ -516,6 +516,390 @@
                 ]
             }
         },
+        "/api/daily/costs/stats": {
+            "get": {
+                "tags": [
+                    "Cost Stats"
+                ],
+                "summary": "Get daily cost statistics",
+                "description": "Retrieve statistics for daily costs for a given date.",
+                "operationId": "6009baf02061b95711748c8ed6d868c8",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "The date for which to retrieve cost statistics, in 'YYYY-MM-DD' format.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-04-07"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "cost_type_name": "utility",
+                                                    "cost_type_id": 2,
+                                                    "price": 100
+                                                },
+                                                {
+                                                    "cost_type_name": "grocery",
+                                                    "cost_type_id": 1,
+                                                    "price": 200
+                                                }
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Daily cost statistics retrieved successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid date format."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An error occurred while processing your request."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/monthly/costs/stats": {
+            "get": {
+                "tags": [
+                    "Cost Stats"
+                ],
+                "summary": "Get monthly cost statistics",
+                "description": "Retrieve statistics for monthly costs for a given date.",
+                "operationId": "c640f7676bfcc86e87bdae728ac82ad5",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "The date for which to retrieve cost statistics, in 'YYYY-MM-DD' format.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-04-07"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "cost_type_name": "utility",
+                                                    "cost_type_id": 2,
+                                                    "price": 100
+                                                },
+                                                {
+                                                    "cost_type_name": "grocery",
+                                                    "cost_type_id": 1,
+                                                    "price": 200
+                                                }
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Daily cost statistics retrieved successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid date format."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An error occurred while processing your request."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/quarterly/costs/stats": {
+            "get": {
+                "tags": [
+                    "Cost Stats"
+                ],
+                "summary": "Get quarterly cost statistics",
+                "description": "Retrieve statistics for quarterly costs for a given date.",
+                "operationId": "965ed5ba4310ab109355a2fafaeb5d71",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "The date for which to retrieve cost statistics, in 'YYYY-MM-DD' format.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-04-07"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "cost_type_name": "utility",
+                                                    "cost_type_id": 2,
+                                                    "price": 100
+                                                },
+                                                {
+                                                    "cost_type_name": "grocery",
+                                                    "cost_type_id": 1,
+                                                    "price": 200
+                                                }
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Daily cost statistics retrieved successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid date format."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An error occurred while processing your request."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/yearly/costs/stats": {
+            "get": {
+                "tags": [
+                    "Cost Stats"
+                ],
+                "summary": "Get yearly cost statistics",
+                "description": "Retrieve statistics for yearly costs for a given date.",
+                "operationId": "c7d4ea4010d813db9c144da684f1634b",
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "The date for which to retrieve cost statistics, in 'YYYY-MM-DD' format.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-04-07"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            },
+                                            "example": [
+                                                {
+                                                    "cost_type_name": "utility",
+                                                    "cost_type_id": 2,
+                                                    "price": 100
+                                                },
+                                                {
+                                                    "cost_type_name": "grocery",
+                                                    "cost_type_id": 1,
+                                                    "price": 200
+                                                }
+                                            ]
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Daily cost statistics retrieved successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid date format."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An error occurred while processing your request."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/cost-types": {
             "get": {
                 "tags": [
