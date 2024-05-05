@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CostType;
 use App\Models\User;
-use App\Services\CostTypesService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -103,12 +101,19 @@ class LoginController extends Controller
     /**
      * @OA\Patch(
      *     path="/api/user/config",
-     *     summary="Update is_first_config status of authenticated user",
+     *     summary="Update api key status of authenticated user",
      *     tags={"User"},
      *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"api_key"},
+     *             @OA\Property(property="api_key", type="string", example="your_api_key_here")
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="is_first_config status updated successfully",
+     *         description="api key status updated successfully",
      *         @OA\JsonContent(
      *             type="object",
      *             @OA\Property(property="data", type="object",
@@ -134,25 +139,25 @@ class LoginController extends Controller
      *     ),
      * )
      */
-    public function updateFirstConfig(Request $request)
+    public function updateApikey(Request $request)
     {
         try {
             // Get the authenticated user
             $user = $request->user();
 
-            // Validate the incoming data
             $request->validate([
-                'is_first_config' => 'boolean',
+                'api_key' => 'string',
             ]);
 
-            // Update user's is_first_config status
-            $user->isFirstConfig();
+            $apiKey = $request->input('api_key');
+
+            $user->updateApiKey($apiKey);
 
             // Return a success response with the updated user data
             return response()->json(['data' => ['message' => 'success', 'user' => $user], 'status_page' => 200]);
         } catch (\Exception $e) {
             // Return an error response if something goes wrong
-            return response()->json(['data' => ['message' => 'Failed to update is_first_config status', 'errors' => $e->getMessage()], 'status_page' => 401]);
+            return response()->json(['data' => ['message' => 'Failed to update api key ', 'errors' => $e->getMessage()], 'status_page' => 401]);
         }
     }
     /**
@@ -201,7 +206,6 @@ class LoginController extends Controller
                 'password' => Hash::make($validatedData['password']),
             ]);
 
-            CostType::addDefaultCostTypes($user);
 
             // Return a success response with the user data wrapped inside the "data" field
             return response()->json(['data' => ['message' => 'User registered successfully', 'user' => $user], 'status_page' => 201], 201);
@@ -251,6 +255,82 @@ class LoginController extends Controller
         } catch (\Exception $e) {
             // Return an error response if something goes wrong
             return response()->json(['data' =>['message' => 'Logout failed', 'error' => $e->getMessage()], 'status_page' => 500]);
+        }
+    }
+    /**
+     * @OA\Patch(
+     *     path="/api/user/password",
+     *     summary="Change user password",
+     *     tags={"User"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"current_password", "new_password", "new_password_confirmation"},
+     *             @OA\Property(property="current_password", type="string", format="password", example="old_password123"),
+     *             @OA\Property(property="new_password", type="string", format="password", example="new_password123"),
+     *             @OA\Property(property="new_password_confirmation", type="string", format="password", example="new_password123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Password changed successfully",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="message", type="string", example="Password changed successfully"),
+     *             ),
+     *             @OA\Property(property="status_page", type="integer", example=200),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="message", type="string", example="Unauthorized"),
+     *             ),
+     *             @OA\Property(property="status_page", type="integer", example=401),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *             @OA\Property(property="errors", type="object", example={"current_password": {"The current password is incorrect."}})
+     *         )
+     *     )
+     * )
+     */
+    public function changePassword(Request $request)
+    {
+        try {
+            // Validate the incoming request data
+            $request->validate([
+                'current_password' => 'required|string',
+                'new_password' => 'required|string|min:8|different:current_password|confirmed',
+            ]);
+
+            // Check if the current password matches the authenticated user's password
+            if (!Hash::check($request->current_password, $request->user()->password)) {
+                throw ValidationException::withMessages(['current_password' => 'The current password is incorrect.']);
+            }
+
+            // Update the user's password
+            $request->user()->update([
+                'password' => Hash::make($request->new_password),
+            ]);
+
+            // Return a success response
+            return response()->json(['data' => ['message' => 'Password changed successfully'], 'status_page' => 200]);
+        } catch (ValidationException $e) {
+            // Return a JSON response with validation errors
+            return response()->json(['data' => ['message' => 'Validation error', 'errors' => $e->validator->errors()], 'status_page' => 422]);
+        } catch (\Exception $e) {
+            // Return an error response if something else goes wrong
+            return response()->json(['data' => ['message' => 'Failed to change password', 'error' => $e->getMessage()], 'status_page' => 500], 500);
         }
     }
 

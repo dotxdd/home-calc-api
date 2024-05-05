@@ -22,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_first_config'
+        'api_key'
     ];
 
     /**
@@ -34,9 +34,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    public function isFirstConfig()
+    public function updateApiKey(string $key)
     {
-        $this->is_first_config = 0;
+        $this->api_key = $key;
         $this->save(); // Optionally save the updated value to the database
     }
     /**
@@ -51,12 +51,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function costTypes():HasMany
-    {
-        return $this->hasMany(CostType::class);
-    }
-    public function cost():HasMany
-    {
-        return $this->hasMany(Cost::class);
-    }
+
 }

@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('cost_types', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
-
+        Schema::create('keywords', function (Blueprint $table) {
+            $table->id();
+            $table->string('value');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('cost_types', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('keywords');
     }
 };

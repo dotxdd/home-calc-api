@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 /**
  * @OA\Info(
- *    title="Swagger with Laravel",
+ *    title="IDEABOX SWAGGER",
  *    version="1.0.0",
  * )
  * @OA\SecurityScheme(

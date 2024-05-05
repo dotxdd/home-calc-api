@@ -1,12 +1,10 @@
 <?php
 
-use App\Http\Controllers\CostController;
-use App\Http\Controllers\CostStatsController;
-use App\Http\Controllers\CostTypeController;
-use App\Http\Controllers\CostTypeLimitController;
+use App\Http\Controllers\KeywordsController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -15,34 +13,36 @@ Route::post('login', LoginController::class)->middleware('guest:sanctum');
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/user', [LoginController::class, 'getUser']);
-    Route::patch('/user/config', [LoginController::class, 'updateFirstConfig']);
-    Route::get('/cost-types', [CostTypeController::class, 'index']);
-    Route::get('/cost-types/{costType}', [CostTypeController::class, 'show']);
-    Route::post('/cost-types', [CostTypeController::class, 'store']);
-    Route::put('/cost-types/{costType}', [CostTypeController::class, 'update']);
-    Route::delete('/cost-types/{costType}', [CostTypeController::class, 'destroy']);
+    Route::patch('/user/config', [LoginController::class, 'updateApiKey']);
+    Route::patch('/user/password', [LoginController::class, 'changePassword']);
 
-    Route::get('/costs', [CostController::class, 'index']);
-    Route::post('/costs', [CostController::class, 'store']);
-    Route::get('/costs/{id}', [CostController::class, 'show']);
-    Route::put('/costs/{id}', [CostController::class, 'update']);
-    Route::delete('/costs/{id}', [CostController::class, 'destroy']);
+    // Routes for CategoryController
 
-    Route::get('/cost-types-limits', [CostTypeLimitController::class, 'index']);
-    Route::get('/cost-types-limits/{id}', [CostTypeLimitController::class, 'show']);
-    Route::post('/cost-types-limits', [CostTypeLimitController::class, 'store']);
-    Route::put('/cost-types-limits/{id}', [CostTypeLimitController::class, 'update']);
-    Route::delete('/cost-types-limits/{id}', [CostTypeLimitController::class, 'destroy']);
+    Route::get('/keywords', [KeywordsController::class, 'index']);
+    Route::post('/keywords', [KeywordsController::class, 'store']);
+    Route::get('/keywords/{id}', [KeywordsController::class, 'show']);
+    Route::put('/keywords/{id}', [KeywordsController::class, 'update']);
+    Route::delete('/keywords/{id}', [KeywordsController::class, 'destroy']);
 
-    //stats
-    Route::get('/daily/costs/stats', [CostStatsController::class, 'getDailyCosts']);
-    Route::get('/monthly/costs/stats', [CostStatsController::class, 'getMonthlyCosts']);
-    Route::get('/quarterly/costs/stats', [CostStatsController::class, 'getQuarterlyCosts']);
-    Route::get('/yearly/costs/stats', [CostStatsController::class, 'getYearlyCosts']);
 
+    Route::get('/favourites', [\App\Http\Controllers\FavouritesController::class, 'index']);
+    Route::post('/favourites', [\App\Http\Controllers\FavouritesController::class, 'store']);
+    Route::get('/favourites/{id}', [\App\Http\Controllers\FavouritesController::class, 'show']);
+    Route::put('/favourites/{id}', [\App\Http\Controllers\FavouritesController::class, 'update']);
+    Route::delete('/favourites/{id}', [\App\Http\Controllers\FavouritesController::class, 'destroy']);
+    Route::post('/favourites/idea', [\App\Http\Controllers\IdeaController::class, 'addFav']);
+
+    Route::post('/categories', [CategoryController::class, 'store']);
+
+    Route::put('/categories/{id}', [CategoryController::class, 'update']);
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
+    Route::post('/generate-text',  [\App\Http\Controllers\IdeaController::class, 'generateText']);
 
 
 });
 Route::post('register', [LoginController::class, 'register'])->middleware('guest:sanctum');
+
+Route::get('/categories', [CategoryController::class, 'index'])->middleware('guest:sanctum');
+Route::get('/categories/{id}', [CategoryController::class, 'show'])->middleware('guest:sanctum');
 
 

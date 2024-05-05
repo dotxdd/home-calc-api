@@ -1,1055 +1,51 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Swagger with Laravel",
+        "title": "IDEABOX SWAGGER",
         "version": "1.0.0"
     },
     "paths": {
-        "/api/costs": {
+        "/api/categories": {
             "get": {
                 "tags": [
-                    "Costs"
+                    "Categories"
                 ],
-                "summary": "Get all costs",
-                "description": "Retrieve a list of all costs.",
-                "operationId": "67efd02dfb69cd07e1a1313709376de2",
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number for pagination (default: 1)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 1
-                        }
-                    },
-                    {
-                        "name": "start_date",
-                        "in": "query",
-                        "description": "Filter costs by start date (YYYY-MM-DD)",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date",
-                            "example": "2024-01-01"
-                        }
-                    },
-                    {
-                        "name": "end_date",
-                        "in": "query",
-                        "description": "Filter costs by end date (YYYY-MM-DD)",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date",
-                            "example": "2024-12-31"
-                        }
-                    },
-                    {
-                        "name": "cost_type_name",
-                        "in": "query",
-                        "description": "Filter costs by related cost type name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
+                "summary": "Get all categories",
+                "operationId": "3f5817a34833d0a1f4af4548dd3aeaba",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "costs": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object"
-                                                    }
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Costs retrieved successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while retrieving costs."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Category"
+                                    }
                                 }
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
-                    "Costs"
+                    "Categories"
                 ],
-                "summary": "Create a new cost",
-                "description": "Create a new cost record.",
-                "operationId": "261237e5f0a5fa11c823ab65f74d6741",
+                "summary": "Create a new category",
+                "operationId": "71fcad552bb0eaba9fb191fd8d8dcab0",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "date",
-                                    "cost_type_id",
-                                    "desc"
-                                ],
-                                "properties": {
-                                    "date": {
-                                        "type": "string",
-                                        "format": "date",
-                                        "example": "2024-03-23"
-                                    },
-                                    "cost_type_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "desc": {
-                                        "type": "string",
-                                        "example": "Description of the cost"
-                                    },
-                                    "price": {
-                                        "type": "integer",
-                                        "example": 322
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Cost created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost created successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 201
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while storing cost."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/costs/{id}": {
-            "get": {
-                "tags": [
-                    "Costs"
-                ],
-                "summary": "Get a specific cost",
-                "description": "Retrieve a specific cost by its ID.",
-                "operationId": "3e70d90bddb4c9279190ebbf3b5ce775",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the cost to retrieve",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Cost retrieved successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost retrieved successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while retrieving cost."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "put": {
-                "tags": [
-                    "Costs"
-                ],
-                "summary": "Update an existing cost",
-                "description": "Update an existing cost record.",
-                "operationId": "48f063081604981bc069d0285f7821fe",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the cost to update",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "date",
-                                    "cost_type_id",
-                                    "desc"
-                                ],
-                                "properties": {
-                                    "date": {
-                                        "type": "string",
-                                        "format": "date",
-                                        "example": "2024-03-23"
-                                    },
-                                    "cost_type_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "desc": {
-                                        "type": "string",
-                                        "example": "Updated description of the cost"
-                                    },
-                                    "price": {
-                                        "type": "integer",
-                                        "example": 190
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Cost updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost updated successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while updating cost."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Costs"
-                ],
-                "summary": "Delete a specific cost",
-                "description": "Delete a specific cost by its ID.",
-                "operationId": "0003b2ebbb629dc423d7e97b9146dfe5",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the cost to delete",
-                        "required": true,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Cost deleted successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost deleted successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while deleting cost."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/daily/costs/stats": {
-            "get": {
-                "tags": [
-                    "Cost Stats"
-                ],
-                "summary": "Get daily cost statistics",
-                "description": "Retrieve statistics for daily costs for a given date.",
-                "operationId": "6009baf02061b95711748c8ed6d868c8",
-                "parameters": [
-                    {
-                        "name": "date",
-                        "in": "query",
-                        "description": "The date for which to retrieve cost statistics, in 'YYYY-MM-DD' format.",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "date",
-                            "example": "2024-04-07"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            },
-                                            "example": [
-                                                {
-                                                    "cost_type_name": "utility",
-                                                    "cost_type_id": 2,
-                                                    "price": 100
-                                                },
-                                                {
-                                                    "cost_type_name": "grocery",
-                                                    "cost_type_id": 1,
-                                                    "price": 200
-                                                }
-                                            ]
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Daily cost statistics retrieved successfully."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Invalid date format."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "An error occurred while processing your request."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/monthly/costs/stats": {
-            "get": {
-                "tags": [
-                    "Cost Stats"
-                ],
-                "summary": "Get monthly cost statistics",
-                "description": "Retrieve statistics for monthly costs for a given date.",
-                "operationId": "c640f7676bfcc86e87bdae728ac82ad5",
-                "parameters": [
-                    {
-                        "name": "date",
-                        "in": "query",
-                        "description": "The date for which to retrieve cost statistics, in 'YYYY-MM-DD' format.",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "date",
-                            "example": "2024-04-07"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            },
-                                            "example": [
-                                                {
-                                                    "cost_type_name": "utility",
-                                                    "cost_type_id": 2,
-                                                    "price": 100
-                                                },
-                                                {
-                                                    "cost_type_name": "grocery",
-                                                    "cost_type_id": 1,
-                                                    "price": 200
-                                                }
-                                            ]
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Daily cost statistics retrieved successfully."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Invalid date format."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "An error occurred while processing your request."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/quarterly/costs/stats": {
-            "get": {
-                "tags": [
-                    "Cost Stats"
-                ],
-                "summary": "Get quarterly cost statistics",
-                "description": "Retrieve statistics for quarterly costs for a given date.",
-                "operationId": "965ed5ba4310ab109355a2fafaeb5d71",
-                "parameters": [
-                    {
-                        "name": "date",
-                        "in": "query",
-                        "description": "The date for which to retrieve cost statistics, in 'YYYY-MM-DD' format.",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "date",
-                            "example": "2024-04-07"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            },
-                                            "example": [
-                                                {
-                                                    "cost_type_name": "utility",
-                                                    "cost_type_id": 2,
-                                                    "price": 100
-                                                },
-                                                {
-                                                    "cost_type_name": "grocery",
-                                                    "cost_type_id": 1,
-                                                    "price": 200
-                                                }
-                                            ]
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Daily cost statistics retrieved successfully."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Invalid date format."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "An error occurred while processing your request."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/yearly/costs/stats": {
-            "get": {
-                "tags": [
-                    "Cost Stats"
-                ],
-                "summary": "Get yearly cost statistics",
-                "description": "Retrieve statistics for yearly costs for a given date.",
-                "operationId": "c7d4ea4010d813db9c144da684f1634b",
-                "parameters": [
-                    {
-                        "name": "date",
-                        "in": "query",
-                        "description": "The date for which to retrieve cost statistics, in 'YYYY-MM-DD' format.",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "date",
-                            "example": "2024-04-07"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            },
-                                            "example": [
-                                                {
-                                                    "cost_type_name": "utility",
-                                                    "cost_type_id": 2,
-                                                    "price": 100
-                                                },
-                                                {
-                                                    "cost_type_name": "grocery",
-                                                    "cost_type_id": 1,
-                                                    "price": 200
-                                                }
-                                            ]
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Daily cost statistics retrieved successfully."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Invalid date format."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "An error occurred while processing your request."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/cost-types": {
-            "get": {
-                "tags": [
-                    "Cost Types"
-                ],
-                "summary": "Get all cost types",
-                "description": "Retrieve a list of all cost types. You can optionally filter by name.",
-                "operationId": "9e86563bdbcb4676328f7ae6c34cd176",
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number for pagination (default: 1)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 1
-                        }
-                    },
-                    {
-                        "name": "name",
-                        "in": "query",
-                        "description": "Filter cost types by name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost_types": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object"
-                                                    }
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost types retrieved successfully."
-                                                },
-                                                "pagination": {
-                                                    "properties": {
-                                                        "total": {
-                                                            "type": "integer",
-                                                            "example": 10
-                                                        },
-                                                        "per_page": {
-                                                            "type": "integer",
-                                                            "example": 10
-                                                        },
-                                                        "current_page": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "last_page": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "from": {
-                                                            "type": "integer",
-                                                            "example": 1
-                                                        },
-                                                        "to": {
-                                                            "type": "integer",
-                                                            "example": 10
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while retrieving cost types."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Cost Types"
-                ],
-                "summary": "Create a new cost type",
-                "description": "Create a new cost type.",
-                "operationId": "3e6777e10182458537e94f304e8e68f3",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "name",
-                                    "desc"
+                                    "name"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "Cost Type Name"
-                                    },
-                                    "desc": {
-                                        "type": "string",
-                                        "example": "Description of cost type"
+                                        "example": "Category Name"
                                     }
                                 },
                                 "type": "object"
@@ -1059,83 +55,27 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Cost type created successfully",
+                        "description": "Category created successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost_type": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type created successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 201
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Category"
                                 }
                             }
                         }
                     },
                     "422": {
-                        "description": "Validation error occurred",
+                        "description": "Validation error",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Validation error occurred."
-                                                }
-                                            },
-                                            "type": "object"
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
                                         },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 422
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while creating cost type."
-                                                }
-                                            },
+                                        "errors": {
                                             "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -1151,96 +91,44 @@
                 ]
             }
         },
-        "/api/cost-types/{costType}": {
+        "/api/categories/{id}": {
             "get": {
                 "tags": [
-                    "Cost Types"
+                    "Categories"
                 ],
-                "summary": "Get a specific cost type",
-                "description": "Retrieve a specific cost type by ID.",
-                "operationId": "7e066aedfb88642e9c4ad7aef19dc70f",
+                "summary": "Get a specific category",
+                "operationId": "c68e76d323c008827a9e47398b1583de",
                 "parameters": [
                     {
-                        "name": "costType",
+                        "name": "id",
                         "in": "path",
-                        "description": "ID of the cost type to retrieve",
+                        "description": "Category ID",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Cost type retrieved successfully",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost_type": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type retrieved successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Category"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Cost type not found",
+                        "description": "Category not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Cost type not found."
-                                        },
-                                        "errors": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while retrieving cost type."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
+                                            "example": "Category not found"
                                         }
                                     },
                                     "type": "object"
@@ -1248,29 +136,22 @@
                             }
                         }
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
-                    "Cost Types"
+                    "Categories"
                 ],
-                "summary": "Update an existing cost type",
-                "description": "Update an existing cost type by ID.",
-                "operationId": "a48136035def74f38847f7b4c1979677",
+                "summary": "Update a category",
+                "operationId": "0e686b2748211cc688333ed705dc111f",
                 "parameters": [
                     {
-                        "name": "costType",
+                        "name": "id",
                         "in": "path",
-                        "description": "ID of the cost type to update",
+                        "description": "Category ID",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1279,18 +160,10 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "name",
-                                    "desc"
-                                ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "Updated Cost Type Name"
-                                    },
-                                    "desc": {
-                                        "type": "string",
-                                        "example": "Updated description of cost type"
+                                        "example": "New Category Name"
                                     }
                                 },
                                 "type": "object"
@@ -1300,83 +173,24 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Cost type updated successfully",
+                        "description": "Category updated successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost_type": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type updated successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Category"
                                 }
                             }
                         }
                     },
-                    "422": {
-                        "description": "Validation error occurred",
+                    "404": {
+                        "description": "Category not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Validation error occurred."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 422
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while updating cost type."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_page": {
-                                            "type": "integer",
-                                            "example": 500
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Category not found"
                                         }
                                     },
                                     "type": "object"
@@ -1393,42 +207,478 @@
             },
             "delete": {
                 "tags": [
-                    "Cost Types"
+                    "Categories"
                 ],
-                "summary": "Delete an existing cost type",
-                "description": "Delete an existing cost type by ID.",
-                "operationId": "281fd3e396ee218559e63ba36a0f173c",
+                "summary": "Delete a category",
+                "operationId": "4c12e22a7f8c617bd83bfa1fdc05428d",
                 "parameters": [
                     {
-                        "name": "costType",
+                        "name": "id",
                         "in": "path",
-                        "description": "ID of the cost type to delete",
+                        "description": "Category ID",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "204": {
-                        "description": "Cost type deleted successfully"
+                        "description": "Category deleted successfully"
                     },
-                    "500": {
-                        "description": "Internal server error",
+                    "404": {
+                        "description": "Category not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Category not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/favourites": {
+            "get": {
+                "tags": [
+                    "Favourites"
+                ],
+                "summary": "Get all favourites",
+                "operationId": "c8a645915581acd65f95cf476eb7bf5a",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Favourites"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Favourites"
+                ],
+                "summary": "Create a new favourite",
+                "operationId": "dce3e6af9abcf6bdb8c60f0288b8ac55",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "generate_date",
+                                    "value",
+                                    "name",
+                                    "category_id"
+                                ],
+                                "properties": {
+                                    "generate_date": {
+                                        "type": "string",
+                                        "example": "2024-05-05"
+                                    },
+                                    "value": {
+                                        "type": "string",
+                                        "example": "Some value"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Favourite Name"
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Favourite created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Favourites"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/favourites/{id}": {
+            "get": {
+                "tags": [
+                    "Favourites"
+                ],
+                "summary": "Get a specific favourite",
+                "operationId": "079c6613d2611a39d514d44567a21e16",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Favourite ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Favourites"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Favourite not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Favourite not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Favourites"
+                ],
+                "summary": "Update a favourite",
+                "operationId": "f2726b81bdfa6c8d1d450801a5cb5e2e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Favourite ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "generate_date": {
+                                        "type": "string",
+                                        "example": "2024-05-06"
+                                    },
+                                    "value": {
+                                        "type": "string",
+                                        "example": "Updated value"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated Favourite Name"
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": "2"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Favourite updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Favourites"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Favourite not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Favourite not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Favourites"
+                ],
+                "summary": "Delete a favourite",
+                "operationId": "36bbcae90b4a41357724abd080bfcf55",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Favourite ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Favourite deleted successfully"
+                    },
+                    "404": {
+                        "description": "Favourite not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Favourite not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/generate-text": {
+            "post": {
+                "tags": [
+                    "GPT"
+                ],
+                "summary": "Generate text using GPT-3.5",
+                "operationId": "ee300fa76206eeee129153f06d2a579c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "text",
+                                    "category_id"
+                                ],
+                                "properties": {
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Your text here"
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Generated text successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "data": {
                                             "properties": {
-                                                "errors": {
+                                                "generated_text": {
                                                     "type": "string",
-                                                    "example": "Error message"
-                                                },
+                                                    "example": "Generated text here"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
                                                 "message": {
                                                     "type": "string",
-                                                    "example": "Error occurred while deleting cost type."
+                                                    "example": "Category ID is missing"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 400
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "API key is missing"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Category not found"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 404
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Failed to generate text"
+                                                },
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message here"
                                                 }
                                             },
                                             "type": "object"
@@ -1451,92 +701,76 @@
                 ]
             }
         },
-        "/api/cost-types-limits": {
-            "get": {
+        "/api/favourites/idea": {
+            "post": {
                 "tags": [
-                    "Cost Type Limits"
+                    "Favourites"
                 ],
-                "summary": "Get all cost type limits",
-                "description": "Retrieve a list of all cost type limits.",
-                "operationId": "c2eddaa5da78888a6e84a6a68b34d956",
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number for pagination (default: 1)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 1
-                        }
-                    },
-                    {
-                        "name": "cost_type_name",
-                        "in": "query",
-                        "description": "Filter cost type limits by related cost type name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
+                "summary": "Create a new favourite",
+                "description": "Insert a new favourite into the database",
+                "operationId": "addFav",
+                "requestBody": {
+                    "description": "Favourite data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "value",
+                                    "name",
+                                    "category_id"
+                                ],
+                                "properties": {
+                                    "value": {
+                                        "type": "string",
+                                        "example": "Some value"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Favourite Name"
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "format": "int64",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
                         }
                     }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Favourite created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Favourites"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/keywords": {
+            "get": {
+                "tags": [
+                    "Keywords"
                 ],
+                "summary": "Get all keywords",
+                "operationId": "77321716e9d1c830141669d329e30d7a",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost_type_limits": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "object"
-                                                    }
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type limits retrieved successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while retrieving cost type limits."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 500
-                                        }
-                                    },
-                                    "type": "object"
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Keyword"
+                                    }
                                 }
                             }
                         }
@@ -1550,45 +784,22 @@
             },
             "post": {
                 "tags": [
-                    "Cost Type Limits"
+                    "Keywords"
                 ],
-                "summary": "Create a new cost type limit",
-                "description": "Create a new cost type limit.",
-                "operationId": "242e71fc79c6ae5107f22a4bac838155",
+                "summary": "Create a new keyword",
+                "operationId": "4246aa68817f3569b37b4508780d122c",
                 "requestBody": {
-                    "description": "Cost type limit data",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "cost_type_id",
-                                    "user_id"
+                                    "value"
                                 ],
                                 "properties": {
-                                    "cost_type_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "user_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "weekly_limit": {
-                                        "type": "number",
-                                        "example": "100.50"
-                                    },
-                                    "monthly_limit": {
-                                        "type": "number",
-                                        "example": "500.00"
-                                    },
-                                    "quarter_limit": {
-                                        "type": "number",
-                                        "example": "1500.00"
-                                    },
-                                    "yearly_limit": {
-                                        "type": "number",
-                                        "example": "6000.00"
+                                    "value": {
+                                        "type": "string",
+                                        "example": "Keyword Value"
                                     }
                                 },
                                 "type": "object"
@@ -1598,74 +809,27 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Cost type limit created successfully",
+                        "description": "Keyword created successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost_type_limit": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type limit created successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 201
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Keyword"
                                 }
                             }
                         }
                     },
                     "422": {
-                        "description": "Unprocessable entity",
+                        "description": "Validation error",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
                                         "errors": {
                                             "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 422
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while creating cost type limit."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 500
                                         }
                                     },
                                     "type": "object"
@@ -1681,23 +845,21 @@
                 ]
             }
         },
-        "/api/cost-types-limits/{id}": {
+        "/api/keywords/{id}": {
             "get": {
                 "tags": [
-                    "Cost Type Limits"
+                    "Keywords"
                 ],
-                "summary": "Get a specific cost type limit",
-                "description": "Retrieve a specific cost type limit by its ID.",
-                "operationId": "c0300c3953d8c86639ea49cb15bfed7b",
+                "summary": "Get a specific keyword",
+                "operationId": "fea92928f540e8ea87133ab4d3b083b8",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the cost type limit to retrieve",
+                        "description": "Keyword ID",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1707,51 +869,20 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost_type_limit": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type limit retrieved successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Keyword"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "Cost type limit not found",
+                        "description": "Keyword not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type limit not found."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 404
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Keyword not found"
                                         }
                                     },
                                     "type": "object"
@@ -1768,57 +899,30 @@
             },
             "put": {
                 "tags": [
-                    "Cost Type Limits"
+                    "Keywords"
                 ],
-                "summary": "Update a specific cost type limit",
-                "description": "Update a specific cost type limit by its ID.",
-                "operationId": "16307ff2e331fe1e803726361f5c2cf3",
+                "summary": "Update a keyword",
+                "operationId": "b3df37861bc87e2e06bd76fa6bbb6159",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the cost type limit to update",
+                        "description": "Keyword ID",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "integer"
                         }
                     }
                 ],
                 "requestBody": {
-                    "description": "Cost type limit data",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": [
-                                    "cost_type_id",
-                                    "user_id"
-                                ],
                                 "properties": {
-                                    "cost_type_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "user_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "weekly_limit": {
-                                        "type": "number",
-                                        "example": "100.50"
-                                    },
-                                    "monthly_limit": {
-                                        "type": "number",
-                                        "example": "500.00"
-                                    },
-                                    "quarter_limit": {
-                                        "type": "number",
-                                        "example": "1500.00"
-                                    },
-                                    "yearly_limit": {
-                                        "type": "number",
-                                        "example": "6000.00"
+                                    "value": {
+                                        "type": "string",
+                                        "example": "Updated Keyword Value"
                                     }
                                 },
                                 "type": "object"
@@ -1828,74 +932,24 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Cost type limit updated successfully",
+                        "description": "Keyword updated successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "cost_type_limit": {
-                                                    "type": "object"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type limit updated successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Keyword"
                                 }
                             }
                         }
                     },
-                    "422": {
-                        "description": "Unprocessable entity",
+                    "404": {
+                        "description": "Keyword not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "errors": {
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 422
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while updating cost type limit."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 500
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Keyword not found"
                                         }
                                     },
                                     "type": "object"
@@ -1912,100 +966,34 @@
             },
             "delete": {
                 "tags": [
-                    "Cost Type Limits"
+                    "Keywords"
                 ],
-                "summary": "Delete a specific cost type limit",
-                "description": "Delete a specific cost type limit by its ID.",
-                "operationId": "02aa46eeda57728b900864b81ccf4940",
+                "summary": "Delete a keyword",
+                "operationId": "fcad57eed23b7fefed961bf1b556c487",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the cost type limit to delete",
+                        "description": "Keyword ID",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Cost type limit deleted successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type limit deleted successfully."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 200
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
+                    "204": {
+                        "description": "Keyword deleted successfully"
                     },
                     "404": {
-                        "description": "Cost type limit not found",
+                        "description": "Keyword not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Cost type limit not found."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 404
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "data": {
-                                            "properties": {
-                                                "errors": {
-                                                    "type": "string",
-                                                    "example": "Error message"
-                                                },
-                                                "message": {
-                                                    "type": "string",
-                                                    "example": "Error occurred while deleting cost type limit."
-                                                }
-                                            },
-                                            "type": "object"
-                                        },
-                                        "status_code": {
-                                            "type": "integer",
-                                            "example": 500
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Keyword not found"
                                         }
                                     },
                                     "type": "object"
@@ -2153,11 +1141,30 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Update is_first_config status of authenticated user",
-                "operationId": "0ad8651103c76a1a425b68d47a01b775",
+                "summary": "Update api key status of authenticated user",
+                "operationId": "bbd9e23b3c9a45ea920bc6d648464daf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "api_key"
+                                ],
+                                "properties": {
+                                    "api_key": {
+                                        "type": "string",
+                                        "example": "your_api_key_here"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "is_first_config status updated successfully",
+                        "description": "api key status updated successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2342,9 +1349,228 @@
                     }
                 ]
             }
+        },
+        "/api/user/password": {
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Change user password",
+                "operationId": "317d2229c9782672c2e6298f7744db4a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "current_password",
+                                    "new_password",
+                                    "new_password_confirmation"
+                                ],
+                                "properties": {
+                                    "current_password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "old_password123"
+                                    },
+                                    "new_password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "new_password123"
+                                    },
+                                    "new_password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "new_password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Password changed successfully"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Unauthorized"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 401
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "current_password": [
+                                                    "The current password is incorrect."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
+        "schemas": {
+            "Category": {
+                "title": "Category",
+                "description": "Category model",
+                "properties": {
+                    "id": {
+                        "description": "ID of the category",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "name": {
+                        "description": "Name of the category",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Update timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Favourites": {
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier for the favourite",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "generate_date": {
+                        "description": "The date when the favourite was generated",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "value": {
+                        "description": "The value of the favourite",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "The name of the favourite",
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "description": "The ID of the user who created the favourite",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "category_id": {
+                        "description": "The ID of the category to which the favourite belongs",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "created_at": {
+                        "description": "The date and time when the favourite was created",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "The date and time when the favourite was last updated",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "Keyword": {
+                "title": "Keyword",
+                "description": "Keyword model",
+                "properties": {
+                    "id": {
+                        "description": "ID of the keyword",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "value": {
+                        "description": "Value of the keyword",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Update timestamp",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
