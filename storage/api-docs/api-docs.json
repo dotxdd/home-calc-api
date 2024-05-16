@@ -1151,6 +1151,94 @@
                 ]
             }
         },
+        "/api/cost-types-without-pagination": {
+            "get": {
+                "tags": [
+                    "Cost Types"
+                ],
+                "summary": "Get all cost types without pagination",
+                "description": "Retrieve a list of all cost types without pagination. You can optionally filter by name.",
+                "operationId": "6889f11cecb35253886907356c43d336",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filter cost types by name",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "cost_types": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Cost types retrieved successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while retrieving cost types."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/cost-types/{costType}": {
             "get": {
                 "tags": [
@@ -1502,7 +1590,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 200
                                         }
@@ -1531,7 +1619,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 500
                                         }
@@ -1567,10 +1655,6 @@
                                 ],
                                 "properties": {
                                     "cost_type_id": {
-                                        "type": "integer",
-                                        "example": "1"
-                                    },
-                                    "user_id": {
                                         "type": "integer",
                                         "example": "1"
                                     },
@@ -1615,7 +1699,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 201
                                         }
@@ -1634,7 +1718,7 @@
                                         "errors": {
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 422
                                         }
@@ -1663,7 +1747,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 500
                                         }
@@ -1720,7 +1804,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 200
                                         }
@@ -1749,7 +1833,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 404
                                         }
@@ -1845,7 +1929,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 200
                                         }
@@ -1864,7 +1948,7 @@
                                         "errors": {
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 422
                                         }
@@ -1893,7 +1977,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 500
                                         }
@@ -1945,7 +2029,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 200
                                         }
@@ -1974,7 +2058,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 404
                                         }
@@ -2003,7 +2087,7 @@
                                             },
                                             "type": "object"
                                         },
-                                        "status_code": {
+                                        "status_page": {
                                             "type": "integer",
                                             "example": 500
                                         }

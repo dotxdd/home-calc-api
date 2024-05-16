@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/cost-types', [CostTypeController::class, 'store']);
     Route::put('/cost-types/{costType}', [CostTypeController::class, 'update']);
     Route::delete('/cost-types/{costType}', [CostTypeController::class, 'destroy']);
+    Route::get('/cost-types-without-pagination', [CostTypeController::class, 'indexWithoutPagination']);
+
 
     Route::get('/costs', [CostController::class, 'index']);
     Route::post('/costs', [CostController::class, 'store']);

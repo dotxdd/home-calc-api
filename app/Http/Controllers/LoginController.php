@@ -201,7 +201,7 @@ class LoginController extends Controller
                 'password' => Hash::make($validatedData['password']),
             ]);
 
-            CostType::addDefaultCostTypes($user);
+           // CostType::addDefaultCostTypes($user);
 
             // Return a success response with the user data wrapped inside the "data" field
             return response()->json(['data' => ['message' => 'User registered successfully', 'user' => $user], 'status_page' => 201], 201);

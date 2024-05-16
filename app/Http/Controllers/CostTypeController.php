@@ -7,7 +7,8 @@ use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Exception;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 class CostTypeController extends Controller
 {
     /**
@@ -156,6 +157,101 @@ class CostTypeController extends Controller
         }
     }
     /**
+     * @OA\Get(
+     *     path="/api/cost-types-without-pagination",
+     *     summary="Get all cost types without pagination",
+     *     tags={"Cost Types"},
+     *     security={{"bearerAuth":{}}},
+     *     description="Retrieve a list of all cost types without pagination. You can optionally filter by name.",
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="Filter cost types by name",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="cost_types",
+     *                     type="array",
+     *                     @OA\Items(type="object")
+     *                 ),
+     *                 @OA\Property(
+     *                     property="message",
+     *                     type="string",
+     *                     example="Cost types retrieved successfully."
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="status_page",
+     *                 type="integer",
+     *                 example=200
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="errors",
+     *                     type="string",
+     *                     example="Error message"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="message",
+     *                     type="string",
+     *                     example="Error occurred while retrieving cost types."
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="status_page",
+     *                 type="integer",
+     *                 example=500
+     *             )
+     *         )
+     *     )
+     * )
+     */
+
+    public function indexWithoutPagination(Request $request)
+    {
+        try {
+            // Retrieve cost types
+            $query = CostType::query();
+
+            // Filter by name if provided in the query
+            if ($request->has('name')) {
+                $query->where('name', 'like', '%' . $request->input('name') . '%');
+            }
+
+            $costTypes = $query->get();
+
+            return response()->json([
+                'data' => ['cost_types' => $costTypes, 'message' => 'Cost types retrieved successfully.'],
+                'status_page' => Response::HTTP_OK
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while retrieving cost types.'],
+                'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
+        }
+    }
+    /**
      * @OA\Post(
      *     path="/api/cost-types",
      *     summary="Create a new cost type",
@@ -263,7 +359,13 @@ class CostTypeController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string',
+                'name' => [
+                    'required',
+                    'string',
+                    Rule::unique('cost_types')->where(function ($query) {
+                        return $query->where('user_id', Auth::id());
+                    }),
+                ],
                 'desc' => 'required|string',
             ]);
 

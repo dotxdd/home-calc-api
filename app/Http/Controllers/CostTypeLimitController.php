@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CostTypeLimit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
@@ -58,7 +59,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=200
      *             )
@@ -84,7 +85,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=500
      *             )
@@ -116,12 +117,12 @@ class CostTypeLimitController extends Controller
 
             return response()->json([
                 'data' => ['cost_type_limits' => $costTypeLimits, 'message' => 'Cost type limits retrieved successfully.'],
-                'status_code' => Response::HTTP_OK
+                'status_page' => Response::HTTP_OK
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while retrieving cost type limits.'],
-                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
+                'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
     }
@@ -139,7 +140,6 @@ class CostTypeLimitController extends Controller
      *         @OA\JsonContent(
      *             required={"cost_type_id", "user_id"},
      *             @OA\Property(property="cost_type_id", type="integer", example="1"),
-     *             @OA\Property(property="user_id", type="integer", example="1"),
      *             @OA\Property(property="weekly_limit", type="number", example="100.50"),
      *             @OA\Property(property="monthly_limit", type="number", example="500.00"),
      *             @OA\Property(property="quarter_limit", type="number", example="1500.00"),
@@ -165,7 +165,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=201
      *             )
@@ -181,7 +181,7 @@ class CostTypeLimitController extends Controller
      *                 type="object"
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=422
      *             )
@@ -207,7 +207,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=500
      *             )
@@ -219,7 +219,6 @@ class CostTypeLimitController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'cost_type_id' => 'required|exists:cost_types,id',
-            'user_id' => 'required|exists:users,id',
             'weekly_limit' => 'numeric|nullable',
             'monthly_limit' => 'numeric|nullable',
             'quarter_limit' => 'numeric|nullable',
@@ -231,18 +230,30 @@ class CostTypeLimitController extends Controller
         }
 
         try {
-            $costTypeLimit = CostTypeLimit::create($request->all());
+            $userId = Auth::id();
+            $costTypeLimit = CostTypeLimit::updateOrCreate(
+                [
+                    'cost_type_id' => $request->input('cost_type_id'),
+                    'user_id' => $userId
+                ],
+                $request->only(['weekly_limit', 'monthly_limit', 'quarter_limit', 'yearly_limit'])
+            );
+
             return response()->json([
-                'data' => ['cost_type_limit' => $costTypeLimit, 'message' => 'Cost type limit created successfully.'],
-                'status_code' => Response::HTTP_CREATED
+                'data' => [
+                    'cost_type_limit' => $costTypeLimit,
+                    'message' => $costTypeLimit->wasRecentlyCreated ? 'Cost type limit created successfully.' : 'Cost type limit updated successfully.'
+                ],
+                'status_page' => $costTypeLimit->wasRecentlyCreated ? Response::HTTP_CREATED : Response::HTTP_OK
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while creating cost type limit.'],
-                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
+                'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while creating/updating cost type limit.'],
+                'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
     }
+
     /**
      * @OA\Get(
      *     path="/api/cost-types-limits/{id}",
@@ -279,7 +290,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=200
      *             )
@@ -305,7 +316,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=404
      *             )
@@ -317,15 +328,15 @@ class CostTypeLimitController extends Controller
     public function show($id)
     {
         try {
-            $costTypeLimit = CostTypeLimit::findOrFail($id)->with('costType')->get();
+            $costTypeLimit = CostTypeLimit::where('id',$id)->with('costType')->first();
             return response()->json([
                 'data' => ['cost_type_limit' => $costTypeLimit, 'message' => 'Cost type limit retrieved successfully.'],
-                'status_code' => Response::HTTP_OK
+                'status_page' => Response::HTTP_OK
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'data' => ['errors' => $e->getMessage(), 'message' => 'Cost type limit not found.'],
-                'status_code' => Response::HTTP_NOT_FOUND
+                'status_page' => Response::HTTP_NOT_FOUND
             ]);
         }
     }
@@ -378,7 +389,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=200
      *             )
@@ -394,7 +405,7 @@ class CostTypeLimitController extends Controller
      *                 type="object"
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=422
      *             )
@@ -420,7 +431,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=500
      *             )
@@ -451,12 +462,12 @@ class CostTypeLimitController extends Controller
 
             return response()->json([
                 'data' => ['cost_type_limit' => $costTypeLimit, 'message' => 'Cost type limit updated successfully.'],
-                'status_code' => Response::HTTP_OK
+                'status_page' => Response::HTTP_OK
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while updating cost type limit.'],
-                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
+                'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
     }
@@ -492,7 +503,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=200
      *             )
@@ -518,7 +529,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=404
      *             )
@@ -544,7 +555,7 @@ class CostTypeLimitController extends Controller
      *                 )
      *             ),
      *             @OA\Property(
-     *                 property="status_code",
+     *                 property="status_page",
      *                 type="integer",
      *                 example=500
      *             )
@@ -561,12 +572,12 @@ class CostTypeLimitController extends Controller
 
             return response()->json([
                 'data' => ['message' => 'Cost type limit deleted successfully.'],
-                'status_code' => Response::HTTP_OK
+                'status_page' => Response::HTTP_OK
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while deleting cost type limit.'],
-                'status_code' => Response::HTTP_INTERNAL_SERVER_ERROR
+                'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
             ]);
         }
     }
