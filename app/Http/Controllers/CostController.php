@@ -320,21 +320,23 @@ class CostController extends Controller
      * )
      */
 
-    public function show($id)
-    {
-        try {
-            $cost = Cost::findOrFail($id)->with('costType')->get();
-            return response()->json([
-                'data' => ['cost' => $cost, 'message' => 'Cost retrieved successfully.'],
-                'status_page' => Response::HTTP_OK
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while retrieving cost.'],
-                'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
-            ]);
-        }
-    }
+     public function show($id)
+     {
+         try {
+             // Retrieve the cost with its related costType
+             $cost = Cost::with('costType')->findOrFail($id);
+
+             return response()->json([
+                 'data' => ['cost' => $cost, 'message' => 'Cost retrieved successfully.'],
+                 'status_page' => Response::HTTP_OK
+             ]);
+         } catch (Exception $e) {
+             return response()->json([
+                 'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while retrieving cost.'],
+                 'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
+             ]);
+         }
+     }
 
     /**
      * @OA\Put(
