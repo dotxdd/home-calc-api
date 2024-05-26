@@ -5,6 +5,7 @@ use App\Http\Controllers\CostStatsController;
 use App\Http\Controllers\CostTypeController;
 use App\Http\Controllers\CostTypeLimitController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PredictionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/quarterly/costs/stats', [CostStatsController::class, 'getQuarterlyCosts']);
     Route::get('/yearly/costs/stats', [CostStatsController::class, 'getYearlyCosts']);
 
+    Route::get('/predictions', [PredictionController::class, 'getPredictions']);
 
 
 });

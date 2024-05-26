@@ -2426,6 +2426,83 @@
                     }
                 ]
             }
+        },
+        "/api/predictions": {
+            "get": {
+                "tags": [
+                    "Predictions"
+                ],
+                "summary": "Get spending predictions for the next 30 days",
+                "description": "Predict how much a user will spend on each cost type over the next 30 days using linear regression.",
+                "operationId": "51c0a60fb5282a990bb11508f8e85bc0",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "predictions": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Predictions retrieved successfully."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "errors": {
+                                                    "type": "string",
+                                                    "example": "Error message"
+                                                },
+                                                "message": {
+                                                    "type": "string",
+                                                    "example": "Error occurred while retrieving predictions."
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "status_page": {
+                                            "type": "integer",
+                                            "example": 500
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {

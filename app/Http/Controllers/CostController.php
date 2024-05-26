@@ -6,7 +6,9 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Models\Cost;
 use Illuminate\Http\Response;
-
+use App\Models\CostTypeLimit;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CostLimitExceededMail;
 
 class CostController extends Controller
 {
@@ -237,6 +239,8 @@ class CostController extends Controller
             ]);
 
             $cost = Cost::create($request->all());
+            $this->checkAndNotifyCostLimit($cost);
+
             return response()->json([
                 'data' => ['cost' => $cost, 'message' => 'Cost created successfully.'],
                 'status_page' => Response::HTTP_CREATED
@@ -320,23 +324,23 @@ class CostController extends Controller
      * )
      */
 
-     public function show($id)
-     {
-         try {
-             // Retrieve the cost with its related costType
-             $cost = Cost::with('costType')->findOrFail($id);
+    public function show($id)
+    {
+        try {
+            // Retrieve the cost with its related costType
+            $cost = Cost::with('costType')->findOrFail($id);
 
-             return response()->json([
-                 'data' => ['cost' => $cost, 'message' => 'Cost retrieved successfully.'],
-                 'status_page' => Response::HTTP_OK
-             ]);
-         } catch (Exception $e) {
-             return response()->json([
-                 'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while retrieving cost.'],
-                 'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
-             ]);
-         }
-     }
+            return response()->json([
+                'data' => ['cost' => $cost, 'message' => 'Cost retrieved successfully.'],
+                'status_page' => Response::HTTP_OK
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'data' => ['errors' => $e->getMessage(), 'message' => 'Error occurred while retrieving cost.'],
+                'status_page' => Response::HTTP_INTERNAL_SERVER_ERROR
+            ]);
+        }
+    }
 
     /**
      * @OA\Put(
@@ -418,6 +422,7 @@ class CostController extends Controller
      *     )
      * )
      */
+
     public function update(Request $request, $id)
     {
         try {
@@ -426,11 +431,12 @@ class CostController extends Controller
                 'cost_type_id' => 'required|exists:cost_types,id',
                 'desc' => 'required|string',
                 'price' => 'required|integer'
-
             ]);
 
             $cost = Cost::findOrFail($id);
             $cost->update($request->all());
+            $this->checkAndNotifyCostLimit($cost);
+
             return response()->json([
                 'data' => ['cost' => $cost, 'message' => 'Cost updated successfully.'],
                 'status_page' => Response::HTTP_OK
@@ -526,4 +532,98 @@ class CostController extends Controller
             ]);
         }
     }
+
+    private function checkAndNotifyCostLimit(Cost $cost)
+    {
+        // Fetch the cost limits for the user and cost type
+        $limits = CostTypeLimit::where('user_id', $cost->user_id)
+            ->where('cost_type_id', $cost->cost_type_id)
+            ->first();
+        if (!$limits) {
+            return; // No limits set for this cost type and user
+        }
+
+        // Check if the cost exceeds the weekly, monthly, quarterly, yearly, or daily limits
+        $exceededLimits = []; // Array to store exceeded limits
+        $currentDate = now(); // Current date
+
+        // Check weekly limit
+        $weeklyCosts = Cost::where('user_id', $cost->user_id)
+            ->where('cost_type_id', $cost->cost_type_id)
+            ->whereBetween('date', [$currentDate->startOfWeek(), $currentDate->endOfWeek()])
+            ->sum('price');
+
+        if ($weeklyCosts > $limits->weekly_limit) {
+            $exceededLimits[] = [
+                'period' => 'weekly',
+                'exceededAmount' => $weeklyCosts - $limits->weekly_limit
+            ];
+        }
+
+        // Check daily limit
+        $dailyCosts = Cost::where('user_id', $cost->user_id)
+            ->where('cost_type_id', $cost->cost_type_id)
+            ->whereDate('date', $currentDate) // Filter by the current date
+            ->sum('price');
+
+        if ($dailyCosts > $limits->daily_limit) {
+            $exceededLimits[] = [
+                'period' => 'daily',
+                'exceededAmount' => $dailyCosts - $limits->daily_limit
+            ];
+        }
+
+        // Check monthly limit
+        $monthlyCosts = Cost::where('user_id', $cost->user_id)
+            ->where('cost_type_id', $cost->cost_type_id)
+            ->whereYear('date', $currentDate->year)
+            ->whereMonth('date', $currentDate->month)
+            ->sum('price');
+
+        if ($monthlyCosts > $limits->monthly_limit) {
+            $exceededLimits[] = [
+                'period' => 'monthly',
+                'exceededAmount' => $monthlyCosts - $limits->monthly_limit
+            ];
+        }
+
+        // Check quarterly limit
+        $quarterlyCosts = Cost::where('user_id', $cost->user_id)
+            ->where('cost_type_id', $cost->cost_type_id)
+            ->whereYear('date', $currentDate->year)
+            ->whereRaw('QUARTER(date) = QUARTER(NOW())')
+            ->sum('price');
+
+        if ($quarterlyCosts > $limits->quarterly_limit) {
+            $exceededLimits[] = [
+                'period' => 'quarterly',
+                'exceededAmount' => $quarterlyCosts - $limits->quarterly_limit
+            ];
+        }
+
+        // Check yearly limit
+        $yearlyCosts = Cost::where('user_id', $cost->user_id)
+            ->where('cost_type_id', $cost->cost_type_id)
+            ->whereYear('date', $currentDate->year)
+            ->sum('price');
+
+        if ($yearlyCosts > $limits->yearly_limit) {
+            $exceededLimits[] = [
+                'period' => 'yearly',
+                'exceededAmount' => $yearlyCosts - $limits->yearly_limit
+            ];
+        }
+
+        // Send separate emails for each exceeded limit
+        foreach ($exceededLimits as $exceededLimit) {
+            Mail::to($cost->user->email)->send(new CostLimitExceededMail(
+                $cost,
+                $limits,
+                $exceededLimit['exceededAmount'],
+                $exceededLimit['period']
+            ));
+        }
+    }
+
+
 }
